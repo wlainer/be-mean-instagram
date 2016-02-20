@@ -1,0 +1,32 @@
+file path
+https://raw.githubusercontent.com/Webschool-io/MongoDb-ebook/master/src/data/pokemons.json
+https://raw.githubusercontent.com/Webschool-io/MongoDb-ebook/master/src/data/restaurantes.json
+
+
+## GROUP
+db.pokemons.group({
+  initial: {total :0},
+  reduce: function(curr, result) {
+    curr.types.forEach(function(type) {
+      if (result[type]) {
+        result[type]++;
+      } else {
+        result[type] = 1;
+      }
+    });
+    result.total++;
+  }
+});
+
+# AGGREGATE
+db.pokemons.aggregate({
+  $group: {
+    _id: {},
+    defense_avg: {$avg: '$defense'},
+    attack_avg: {$avg: '$attack'},
+
+    defense: {$sum: '$defense'},
+    attack: {$sum: '$attack'},
+    total: {$sum: 1}
+  }
+})
